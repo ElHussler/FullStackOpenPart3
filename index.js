@@ -37,6 +37,13 @@ app.get('/api/persons/:id', (request, response) => {
     response.json(person)
 })
 
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter(p => p.id !== id)
+
+  response.status(204).end()
+})
+
 app.get('/info', (request, response) => {
   const personCount = persons ? persons.length : 0
   const timestamp = new Date().toString()
