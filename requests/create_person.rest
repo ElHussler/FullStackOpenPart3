@@ -1,5 +1,5 @@
-#POST http://localhost:3001/api/persons/
-POST https://fullstackopenpart3backend.fly.dev/api/persons/
+POST http://localhost:3001/api/persons/
+#POST https://fullstackopenpart3backend.fly.dev/api/persons/
 content-type: application/json
 
 {
