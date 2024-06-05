@@ -10,12 +10,17 @@
     "build:start": "npm run build:ui && npm run start",
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no text specified\" && exit 1"
+    "test": "echo \"Error: no text specified\" && exit 1",
+		"lint": "eslint ."
   },
   "author": "Luke Hussey",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.4.0",
     "@flydotio/dockerfile": "^0.5.7",
+    "@stylistic/eslint-plugin-js": "^2.1.0",
+    "eslint": "^9.4.0",
+    "globals": "^15.3.0",
     "nodemon": "^3.1.2"
   },
   "dependencies": {
