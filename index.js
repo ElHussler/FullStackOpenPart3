@@ -49,22 +49,26 @@ const generateId = () => {
   return Math.floor(Math.random() * 1000)
 }
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => next(error))
 })
 
-app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(p => p.id === id)
-  if (!person)
-    return response.status(404).end()
-  else
-    response.json(person)
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person)
+        response.json(person)
+      else
+        return response.status(404).end()
+    })
+    .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body.name || !body.number) {
@@ -84,9 +88,11 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
   })
 
-  person.save().then(savedPerson => {
-    response.json(person)
-  })
+  person.save()
+    .then(savedPerson => {
+      response.json(person)
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -103,6 +109,18 @@ app.get('/info', (request, response) => {
   console.log('timestamp: ', timestamp)
   response.send(`<p>Phonebook has info for ${personCount} people</p><p>${timestamp}</p>`)
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.log(error.messsage)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
