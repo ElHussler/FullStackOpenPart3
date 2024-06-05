@@ -49,6 +49,7 @@ const generateId = () => {
   return Math.floor(Math.random() * 1000)
 }
 
+//USES DATABASE
 app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(persons => {
@@ -57,6 +58,7 @@ app.get('/api/persons', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//USES DATABASE
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
     .then(person => {
@@ -68,6 +70,7 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//USES DATABASE
 app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
 
@@ -86,6 +89,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//USES DATABASE
 app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
@@ -113,6 +117,7 @@ app.post('/api/persons', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//USES DATABASE
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(result => {
@@ -121,11 +126,13 @@ app.delete('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+//USES DATABASE
 app.get('/info', (request, response) => {
-  const personCount = persons ? persons.length : 0
-  const timestamp = new Date().toString()
-  console.log('timestamp: ', timestamp)
-  response.send(`<p>Phonebook has info for ${personCount} people</p><p>${timestamp}</p>`)
+  Person.countDocuments({})
+    .then(count => {
+      const timestamp = new Date().toString()
+      response.send(`<p>Phonebook has info for ${count} people</p><p>${timestamp}</p>`)
+    })
 })
 
 const errorHandler = (error, request, response, next) => {
